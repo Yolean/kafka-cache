@@ -37,3 +37,54 @@ type Session {
   ipAddress: String
 }
 ```
+
+## Operational aspects
+
+We'll reference these assumptions using OPS[X], as they'll be essential for scoping.
+
+ 1. We run Kubernetes (or equivalent), i.e. something with _pods_ in which our microservice is a container.
+
+ 2. Likewise, each service is configured and scaled using a _deployment_.
+
+ 3. We monitor this using Prometheus (or equivalent),
+    i.e a service can _trust_ that a human will be paged if an important metric deviates from the expected.
+
+
+### Pod identity
+
+Pods give each instance of our service a unique identity, typically through an environment variable:
+
+```yaml
+env:
+  - name: POD_NAME
+    valueFrom:
+      fieldRef:
+        fieldPath: metadata.name
+  - name: POD_NAMESPACE
+    valueFrom:
+      fieldRef:
+        fieldPath: metadata.namespace
+```
+
+The identifier becomes `$POD_NAMESPACE.[service name].$POD_NAME`.
+With OPS2 we can reduce this to `$POD_NAMESPACE.$POD_NAME`
+because the deployment's name is part of pod name
+and can be assumed to reflect the service name.
+
+## Caching rules
+
+ 1. The cache is _only_ updated through topic events.
+    In other words the container is not allowed to write to the cache.
+
+ 2. Caches may lag behind their backing topic(s).
+    We should be to monitor this using regular Kafka consumer lag.
+
+## Handling inconsistencies.
+
+Design decisions, probably per topic and/or per service.
+
+ 1. Do we accept invalid writes to the topic. I.e. do we techically _enforce_ a schema?
+
+ 2. Do we validate individual messages at read?
+
+ 3. Do we validate that the cache mutation that a message leads to?
