@@ -1,0 +1,44 @@
+{
+  "name": "kafka-cache",
+  "version": "1.0.0",
+  "description": "Explorations for the log-backed in-memory cache we need in almost every service",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/build-contract/build-contract",
+    "unit-tests": "./node_modules/.bin/mocha"
+  },
+  "engines": {
+    "node": ">=8.7"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Yolean/kafka-cache.git"
+  },
+  "keywords": [
+    "kafka",
+    "key-value",
+    "store",
+    "cache"
+  ],
+  "author": "Yolean AB",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Yolean/kafka-cache/issues"
+  },
+  "homepage": "https://github.com/Yolean/kafka-cache#readme",
+  "devDependencies": {
+    "build-contract": "1.1.2",
+    "chai": "4.1.2",
+    "mocha": "4.0.1",
+    "simple-mock": "0.8.0"
+  },
+  "dependencies": {
+    "async": "2.6.0",
+    "bunyan": "1.8.12",
+    "encoding-down": "3.0.0",
+    "leveldown": "2.1.0",
+    "levelup": "2.0.1",
+    "memdown": "1.4.1",
+    "node-rdkafka": "2.2.1"
+  }
+}
