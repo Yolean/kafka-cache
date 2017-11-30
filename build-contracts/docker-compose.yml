@@ -1,0 +1,37 @@
+version: "2.1"
+services:
+  zookeeper:
+    image: solsson/kafka:1.0.0@sha256:17fdf1637426f45c93c65826670542e36b9f3394ede1cb61885c6a4befa8f72d
+    entrypoint: ./bin/zookeeper-server-start.sh
+    command:
+    - ./config/zookeeper.properties
+  kafka:
+    image: solsson/kafka:1.0.0@sha256:17fdf1637426f45c93c65826670542e36b9f3394ede1cb61885c6a4befa8f72d
+    links:
+    - zookeeper
+    entrypoint: ./bin/kafka-server-start.sh
+    command:
+    - ./config/server.properties
+    - --override
+    -   zookeeper.connect=zookeeper:2181
+    - --override
+    -   log.retention.hours=-1
+    - --override
+    -   log.dirs=/var/lib/kafka/data/topics
+    - --override
+    -   auto.create.topics.enable=true
+  topic-client-live:
+    image: solsson/kafka-topic-client
+    links:
+      - zookeeper
+      - kafka
+    environment:
+      TOPIC_NAME: build-contracts.basics.001
+  test-basics:
+    build:
+      context: ../
+      dockerfile: build-contracts/basics/Dockerfile
+    labels:
+      - com.yolean.build-contract
+    links:
+      - kafka
