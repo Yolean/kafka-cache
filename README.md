@@ -1,5 +1,31 @@
 # kafka-cache
-Explorations for the log-backed in-memory cache we need in almost every service
+The log-backed in-memory cache we need in almost every service
+
+## Usage
+
+```js
+const KafkaCache = require('kafka-cache');
+
+const cache = KafkaCache.create({
+  // Default options listed as values
+  kafkaHost: 'http://localhost:9092', // used for bootstrapping kafka connection
+  topic: '', // required!
+  valueEncoding: 'json', // anything that encoding-down supports
+  keyEncoding: 'utf-8', // anything that encoding-down supports
+  // TODO Support resolvers that require batch updates (i.e. update several keys)
+  resolver: x => x, // transform your message value before inserting it into the store
+  leveldown: memdown() // an instance of an abstract-leveldown implementation
+});
+
+cache.onReady(() => {
+  // Cache has caught up to recent messages in the kafka topic
+
+  // Identical to levelup.get. error is an object { notFound: true } for missing keys
+  cache.get(key, (error, value) => {
+
+  });
+});
+```
 
 ## Sample data model
 

@@ -1,0 +1,12 @@
+{
+  "name": "basics",
+  "main": "index.js",
+  "dependencies": {
+    "chai": "4.1.2",
+    "mocha": "4.0.1",
+    "uuid": "3.1.0"
+  },
+  "engines": {
+    "node": ">=8.7"
+  }
+}
