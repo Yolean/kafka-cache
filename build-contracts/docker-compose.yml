@@ -35,3 +35,7 @@ services:
       - com.yolean.build-contract
     links:
       - kafka
+  unit-tests:
+    build:
+      context: ../
+      dockerfile: ./test/Dockerfile
