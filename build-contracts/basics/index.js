@@ -38,7 +38,7 @@ describe('kafka-cache build-contract basics', function () {
               expect(value).to.deep.equal({ json: 'whadup' });
               done();
             });
-          }, 1000);
+          }, 3000);
         });
       });
     });
