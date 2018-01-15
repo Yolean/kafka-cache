@@ -5,11 +5,18 @@ const simple = require('simple-mock');
 
 const memdown = require('memdown');
 
+function createMockMetricsApi() {
+  return {
+    incMissingKey: simple.spy(),
+    incStreamError: simple.spy()
+  };
+}
+
 describe('KafkaCache unit-tests', function () {
 
   afterEach(() => memdown.clearGlobalStore());
 
-  it('ignores payloads with missing keys', function (done) {
+  it('ignores payloads with missing keys but logs them and reports them as metrics', function (done) {
 
     const logger = {
       debug: simple.spy(),
@@ -22,6 +29,8 @@ describe('KafkaCache unit-tests', function () {
       stream: simple.mock()
     };
 
+    const metricsApi = createMockMetricsApi();
+
     const cache = new KafkaCache({
       streamReady: Promise.resolve({ stream: mocks.stream, currentTopicOffset: -1 }),
       log: logger,
@@ -29,7 +38,8 @@ describe('KafkaCache unit-tests', function () {
         keyEncoding: 'utf-8',
         valueEncoding: 'json'
       },
-      resolver: x => x
+      resolver: x => x,
+      metrics: metricsApi
     });
 
     const message = {
@@ -38,8 +48,10 @@ describe('KafkaCache unit-tests', function () {
     };
 
     cache.onReady(() => {
+      expect(metricsApi.incMissingKey.callCount).to.equal(0);
       mocks.stream.lastCall.arg(message);
       expect(logger.error.lastCall.arg).to.contain('Falsy keys are not supported');
+      expect(metricsApi.incMissingKey.callCount).to.equal(1);
 
       done();
     });
@@ -58,7 +70,8 @@ describe('KafkaCache unit-tests', function () {
         keyEncoding: 'utf-8',
         valueEncoding: 'json'
       },
-      resolver: x => x
+      resolver: x => x,
+      metrics: createMockMetricsApi()
     });
 
     const message = {

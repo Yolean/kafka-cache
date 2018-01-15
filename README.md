@@ -14,7 +14,8 @@ const cache = KafkaCache.create({
   keyEncoding: 'utf-8', // anything that encoding-down supports
   // TODO Support resolvers that require batch updates (i.e. update several keys)
   resolver: x => x, // transform your message value before inserting it into the store
-  leveldown: memdown() // an instance of an abstract-leveldown implementation
+  leveldown: memdown(), // an instance of an abstract-leveldown implementation
+  metrics: require('prom-client') // optional, prometheus metrics 
 });
 
 cache.onReady(() => {
