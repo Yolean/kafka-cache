@@ -10,12 +10,13 @@ const cache = KafkaCache.create({
   // Default options listed as values
   kafkaHost: 'http://localhost:9092', // used for bootstrapping kafka connection
   topic: '', // required!
+  readOnly: true, // cache.put will throw an error as long as this is not set to false
   valueEncoding: 'json', // anything that encoding-down supports
   keyEncoding: 'utf-8', // anything that encoding-down supports
   // TODO Support resolvers that require batch updates (i.e. update several keys)
   resolver: x => x, // transform your message value before inserting it into the store
   leveldown: memdown(), // an instance of an abstract-leveldown implementation
-  metrics: require('prom-client') // optional, prometheus metrics 
+  metrics: require('prom-client') // optional, prometheus metrics
 });
 
 cache.onReady(() => {
@@ -24,6 +25,15 @@ cache.onReady(() => {
   // Identical to levelup.get. error is an object { notFound: true } for missing keys
   cache.get(key, (error, value) => {
 
+  });
+
+  // Writes to the kafka topic ...
+  cache.put(key, value, (error, offset) => {
+    // Returns the offset for the topic.
+
+    // TODO: This does not guarantee that cache.get(key, ...)
+    // will return value we just put into the cache.
+    // We need to add a way to wait for the cache's consumer to catch up
   });
 });
 ```
