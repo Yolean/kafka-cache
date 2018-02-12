@@ -20,13 +20,20 @@ services:
     -   log.dirs=/var/lib/kafka/data/topics
     - --override
     -   auto.create.topics.enable=true
-  topic-client-live:
+  topic-client-basics-1:
     image: solsson/kafka-topic-client
     links:
       - zookeeper
       - kafka
     environment:
       TOPIC_NAME: build-contracts.basics.001
+  topic-client-basics-2:
+    image: solsson/kafka-topic-client
+    links:
+      - zookeeper
+      - kafka
+    environment:
+      TOPIC_NAME: build-contracts.basics.002
   test-basics:
     build:
       context: ../
