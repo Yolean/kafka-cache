@@ -40,6 +40,6 @@
     "leveldown": "2.1.0",
     "levelup": "2.0.1",
     "memdown": "1.4.1",
-    "node-rdkafka": "2.2.1"
+    "node-rdkafka": "2.2.3"
   }
 }
