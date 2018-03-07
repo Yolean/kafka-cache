@@ -8,7 +8,7 @@ const KafkaCache = require('kafka-cache');
 
 const cache = KafkaCache.create({
   // Default options listed as values
-  kafkaHost: 'http://localhost:9092', // used for bootstrapping kafka connection
+  kafkaHost: 'kafka:9092', // used for bootstrapping kafka connection
   topic: '', // required!
   readOnly: true, // cache.put will throw an error as long as this is not set to false
   valueEncoding: 'json', // anything that encoding-down supports
