@@ -28,6 +28,7 @@
   },
   "homepage": "https://github.com/Yolean/kafka-cache#readme",
   "devDependencies": {
+    "@types/node-rdkafka": "github:Yolean/node-rdkafka-types",
     "build-contract": "1.1.2",
     "chai": "4.1.2",
     "mocha": "4.0.1",
@@ -37,9 +38,8 @@
     "async": "2.6.0",
     "bunyan": "1.8.12",
     "encoding-down": "3.0.0",
-    "leveldown": "2.1.0",
-    "levelup": "2.0.1",
-    "memdown": "1.4.1",
-    "node-rdkafka": "2.2.3"
+    "leveldown": "2.1.1",
+    "levelup": "2.0.2",
+    "memdown": "2.0.0"
   }
 }
