@@ -41,17 +41,17 @@ services:
     environment:
       TOPIC_NAME: build-contracts.basics.002
   test-basics:
-    build:
-      context: ../
-      dockerfile: build-contracts/basics/Dockerfile
+    depends_on:
+    - yolean-kafka-cache
+    build: ./basics
     labels:
       - com.yolean.build-contract
     links:
       - kafka
       - zookeeper
   unit-tests:
-    build:
-      context: ../
-      dockerfile: ./test/Dockerfile
+    depends_on:
+    - yolean-kafka-cache
+    build: ../test
     labels:
       - com.yolean.build-contract

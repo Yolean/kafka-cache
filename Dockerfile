@@ -1,6 +1,6 @@
 FROM yolean/node-kafka@sha256:3acd64fcc616872ece886d115a0514f23f0a3ee98238d2ac0f9043abbc6cea37
 
-COPY . /usr/src/yolean-kafka-cache
+COPY package.json /usr/src/yolean-kafka-cache/package.json
 
 RUN set -ex; \
   export DEBIAN_FRONTEND=noninteractive; \
@@ -25,3 +25,5 @@ RUN set -ex; \
   apt-get purge -y --auto-remove $buildDeps; \
   rm -rf /var/lib/apt/lists/*; \
   rm -rf /var/log/apt /var/log/dpkg.log /var/log/alternatives.log;
+
+COPY . /usr/src/yolean-kafka-cache
