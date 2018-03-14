@@ -21,7 +21,7 @@ RUN apt-get update && \
 
 WORKDIR /usr/src/app
 
-COPY ./build-contracts/basics/package.json ./package.json
+COPY build-contracts/basics/package.json ./package.json
 
 RUN npm install
 
