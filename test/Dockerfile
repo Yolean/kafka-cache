@@ -1,14 +1,5 @@
-FROM yolean/node as build
+FROM yolean/node-kafka-cache
 
-RUN apt-get update && \
-  apt-get install make g++ python libsasl2-2 libsasl2-dev libssl-dev zlib1g-dev --no-install-recommends -y
-
-WORKDIR /kafka-cache
-
-COPY package.json .
-
-RUN npm install
-
-COPY . .
+WORKDIR /usr/src/yolean-kafka-cache
 
 ENTRYPOINT ["./node_modules/.bin/mocha", "-t", "60000", "--exit"]

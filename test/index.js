@@ -14,8 +14,6 @@ function createMockMetricsApi() {
 
 describe('KafkaCache unit-tests', function () {
 
-  afterEach(() => memdown.clearGlobalStore());
-
   it('ignores payloads with missing keys but logs them and reports them as metrics', function (done) {
 
     const logger = {

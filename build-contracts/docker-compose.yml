@@ -1,5 +1,11 @@
 version: "2.1"
 services:
+  # TODO we're not actually testing the target image, we only build it and then run tests in separate containers
+  yolean-kafka-cache:
+    image: yolean/node-kafka-cache
+    build: ../
+    labels:
+      - com.yolean.build-target
   zookeeper:
     image: solsson/kafka:1.0.0@sha256:17fdf1637426f45c93c65826670542e36b9f3394ede1cb61885c6a4befa8f72d
     entrypoint: ./bin/zookeeper-server-start.sh
@@ -35,17 +41,17 @@ services:
     environment:
       TOPIC_NAME: build-contracts.basics.002
   test-basics:
-    build:
-      context: ../
-      dockerfile: build-contracts/basics/Dockerfile
+    depends_on:
+    - yolean-kafka-cache
+    build: ./basics
     labels:
       - com.yolean.build-contract
     links:
       - kafka
       - zookeeper
   unit-tests:
-    build:
-      context: ../
-      dockerfile: ./test/Dockerfile
+    depends_on:
+    - yolean-kafka-cache
+    build: ../test
     labels:
       - com.yolean.build-contract

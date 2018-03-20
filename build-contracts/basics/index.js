@@ -2,7 +2,7 @@ const { expect } = require('chai');
 const bunyan = require('bunyan');
 const log = bunyan.createLogger({ name: 'test-basics', serializers: bunyan.stdSerializers });
 
-const KafkaCache = require('/kafka-cache');
+const KafkaCache = require('kafka-cache');
 
 const uuid = require('uuid');
 
