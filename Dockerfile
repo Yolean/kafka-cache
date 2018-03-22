@@ -1,4 +1,4 @@
-FROM yolean/node-kafka@sha256:32308f6369b1ecbedd97d0eda8ab8eac2a95a567ef7bbaffaef0d510c7b3c307
+FROM yolean/node-kafka@sha256:aa2df48335d5713655d7154686fa27191a4526054878a19b788b71ca4cdc297f
 
 COPY package.json /usr/src/yolean-kafka-cache/package.json
 
@@ -12,7 +12,6 @@ RUN set -ex; \
     libssl-dev \
     zlib1g-dev \
     liblz4-dev \
-    git \
   '; \
   apt-get update && apt-get install -y $runDeps $buildDeps --no-install-recommends; \
   \
