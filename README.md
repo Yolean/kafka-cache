@@ -1,4 +1,4 @@
-Note: we're no longer publishing this package to npm. We're using the `yolean/node-kafka-cache` Docker image. For regular npm install user `Yolean/kafka-cache#[commit]` in your package.json instead.
+Note: we're no longer publishing this package to npm. We're using the `yolean/node-kafka-cache` Docker image. For regular npm dependencies use `Yolean/kafka-cache#[commit]` in your package.json.
 
 # kafka-cache
 The log-backed in-memory cache we need in almost every service
