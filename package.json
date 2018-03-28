@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/Yolean/kafka-cache#readme",
   "devDependencies": {
-    "@types/node-rdkafka": "github:Yolean/node-rdkafka-types",
+    "@types/node-rdkafka": "github:Yolean/node-rdkafka-types"
   },
   "dependencies": {
   }
