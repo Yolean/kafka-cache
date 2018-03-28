@@ -1,5 +1,5 @@
 {
-  "name": "kafka-cache",
+  "name": "@types/kafka-cache",
   "version": "1.2.1",
   "description": "Explorations for the log-backed in-memory cache we need in almost every service",
   "main": "index.js",
