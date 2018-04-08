@@ -1,4 +1,4 @@
-FROM yolean/node-kafka@sha256:e7b10fa5363c2e2384b860c1d8a78ec34eadf0f32cb7818ed0e94cac25e77176
+FROM yolean/node-kafka@sha256:3f15521b09217b23104d62d4bbc4e187adb8f2156905d9b772f1d7d19381973b
 
 COPY package.json /usr/src/yolean-kafka-cache/package.json
 
