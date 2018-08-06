@@ -66,6 +66,22 @@ describe('kafka-cache build-contract basics', function () {
     });
   });
 
+  it('doesnt transform buffer payloads in any way', async function () {
+
+    const cache = KafkaCache.create({
+      kafkaHost: 'kafka:9092', // We never talked about this one but I guess it's required nonetheless
+      topic: 'build-contract.basics.buffer',
+      readOnly: false,
+      valueEncoding: 'json'
+    });
+
+    await cache.onReady();
+    await cache.put('foo.bar', Buffer.from(JSON.stringify({ foo: 'bar' })));
+    await new Promise(resolve => cache.on('put', () => resolve()));
+    const foo = await cache.get('foo.bar');
+    expect(foo).to.equal(Buffer.from(JSON.stringify({ foo: 'bar' })));
+  });
+
   it('supports gzip compression');
   it('supports snappy compression');
   // We might want to test this by simply creating two caches on the same
