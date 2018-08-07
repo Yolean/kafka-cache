@@ -29,7 +29,7 @@
   "homepage": "https://github.com/Yolean/kafka-cache#readme",
   "devDependencies": {
     "@types/node-rdkafka": "github:Yolean/node-rdkafka-types",
-    "build-contract": "1.1.2",
+    "build-contract": "1.5.0",
     "chai": "4.1.2",
     "mocha": "4.0.1",
     "simple-mock": "0.8.0"
