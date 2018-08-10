@@ -1,4 +1,4 @@
-version: "2.1"
+version: "3.4"
 services:
   # TODO we're not actually testing the target image, we only build it and then run tests in separate containers
   yolean-kafka-cache:

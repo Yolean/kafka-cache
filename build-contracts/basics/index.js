@@ -3,6 +3,7 @@ const bunyan = require('bunyan');
 const log = bunyan.createLogger({ name: 'test-basics', serializers: bunyan.stdSerializers });
 
 const KafkaCache = require('kafka-cache');
+const compression = require('kafka-cache/lib/compression');
 
 const uuid = require('uuid');
 
@@ -64,6 +65,84 @@ describe('kafka-cache build-contract basics', function () {
     return cache.onReady().then(() => {
       expect(() => cache.write('test', { foo: 'bar' })).to.throw();
     });
+  });
+
+  it('is possible to write compressed data with only the kafkaWrite api', async function () {
+    const kafkaWrite = KafkaCache.createKafkaWrite({
+      log,
+      topic: 'build-contract.basics.gzip',
+      kafkaHost: 'kafka:9092',
+      valueEncoding: 'kafka-cache.json.gzip'
+    });
+
+    const key1 = 'gzip_json_' + uuid.v4();
+    const key2 = 'gzip_json_' + uuid.v4();
+    const key3 = 'gzip_json_' + uuid.v4();
+
+    await kafkaWrite(key1, { test: 'blä1' });
+    await kafkaWrite(key2, { test: 'blä2' });
+    await kafkaWrite(key3, { test: 'blä3' });
+
+    const cache = KafkaCache.create({
+      kafkaHost: 'kafka:9092', // We never talked about this one but I guess it's required nonetheless
+      topic: 'build-contract.basics.gzip',
+      readOnly: false,
+      valueEncoding: 'binary',
+      log
+    });
+
+    await cache.onReady();
+
+    // NOTE: This kinda uses the internals too much.
+    // But it helps us validate that we have something compressed inside the kafka topic
+
+    const val1 = await cache.get(key1);
+    expect(val1).to.deep.equal(compression.compress({ test: 'blä1' }));
+    const val2 = await cache.get(key2);
+    expect(val2).to.deep.equal(compression.compress({ test: 'blä2' }));
+    const val3 = await cache.get(key3);
+    expect(val3).to.deep.equal(compression.compress({ test: 'blä3' }));
+  });
+
+  it('is also possible to put and get compressed values within the same kafka-cache instance', async function () {
+
+    const cache = KafkaCache.create({
+      kafkaHost: 'kafka:9092', // We never talked about this one but I guess it's required nonetheless
+      topic: 'build-contract.basics.gzip',
+      readOnly: false,
+      valueEncoding: 'kafka-cache.json.gzip',
+      log
+    });
+
+    await cache.onReady();
+
+    const key1 = 'gzip_json_1_' + uuid.v4();
+    const key2 = 'gzip_json_2_' + uuid.v4();
+    const key3 = 'gzip_json_3_' + uuid.v4();
+
+    const receivePut = (key) => new Promise(resolve => cache.on('put', (id) => {
+      if (id.toString() === key) resolve();
+    }));
+
+    // Start watching for puts received before putting
+    const putsReceived = [
+      receivePut(key1),
+      receivePut(key2),
+      receivePut(key3),
+    ];
+
+    cache.put(key1, { test: 'blä1' });
+    cache.put(key2, { test: 'blä2' });
+    cache.put(key3, { test: 'blä3' });
+
+    await Promise.all(putsReceived);
+
+    const val1 = await cache.get(key1);
+    expect(val1).to.deep.equal({ test: 'blä1' });
+    const val2 = await cache.get(key2);
+    expect(val2).to.deep.equal({ test: 'blä2' });
+    const val3 = await cache.get(key3);
+    expect(val3).to.deep.equal({ test: 'blä3' });
   });
 
   it('supports gzip compression');
