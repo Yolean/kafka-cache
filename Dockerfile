@@ -26,3 +26,5 @@ RUN set -ex; \
   rm -rf /var/log/apt /var/log/dpkg.log /var/log/alternatives.log;
 
 COPY . /usr/src/yolean-kafka-cache
+
+RUN cd /usr/src/yolean-kafka-cache && ./node_modules/.bin/mocha -t 60000 --exit

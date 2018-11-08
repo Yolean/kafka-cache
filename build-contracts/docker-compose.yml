@@ -49,9 +49,3 @@ services:
     links:
       - kafka
       - zookeeper
-  unit-tests:
-    depends_on:
-    - yolean-kafka-cache
-    build: ../test
-    labels:
-      - com.yolean.build-contract
