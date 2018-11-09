@@ -61,12 +61,12 @@ services:
     working_dir: /usr/src/yolean-kafka-cache
     entrypoint:
       - npm run itest
-    entrypoint:
-      - tail
-      - -f
-      - /dev/null
-    volumes:
-      - ../:/usr/src/yolean-kafka-cache
+    # entrypoint:
+    #   - tail
+    #   - -f
+    #   - /dev/null
+    # volumes:
+    #   - ../:/usr/src/yolean-kafka-cache
   kafkacat:
     image: solsson/kafkacat
     links:
