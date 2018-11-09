@@ -60,7 +60,7 @@ services:
       - zookeeper
     working_dir: /usr/src/yolean-kafka-cache
     entrypoint:
-      - npm run test
+      - npm run itest
     entrypoint:
       - tail
       - -f
