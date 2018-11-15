@@ -49,9 +49,32 @@ services:
     links:
       - kafka
       - zookeeper
-  unit-tests:
+  itest:
     depends_on:
     - yolean-kafka-cache
-    build: ../test
+    build: ../
     labels:
       - com.yolean.build-contract
+    links:
+      - kafka
+      - zookeeper
+    working_dir: /usr/src/yolean-kafka-cache
+    entrypoint:
+      - npm
+      - run
+      - itest
+    # entrypoint:
+    #   - tail
+    #   - -f
+    #   - /dev/null
+    # volumes:
+    #   - ../:/usr/src/yolean-kafka-cache
+  kafkacat:
+    image: solsson/kafkacat
+    links:
+      - kafka
+      - zookeeper
+    entrypoint:
+      - tail
+      - -f
+      - /dev/null

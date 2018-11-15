@@ -1,4 +1,4 @@
-FROM yolean/node-kafka@sha256:3c601fa5f74a5d2d5fd06d7a55ea8171b58b2fe673027c1ee953e32daabcaa32
+FROM yolean/node-kafka@sha256:f7aedb184d533cef7b4a88ea8520271f5912fedbc7016f0b5bb8daf29cd39907
 
 COPY package.json /usr/src/yolean-kafka-cache/package.json
 
@@ -26,3 +26,5 @@ RUN set -ex; \
   rm -rf /var/log/apt /var/log/dpkg.log /var/log/alternatives.log;
 
 COPY . /usr/src/yolean-kafka-cache
+
+RUN cd /usr/src/yolean-kafka-cache && ./node_modules/.bin/mocha -t 60000 --exit
