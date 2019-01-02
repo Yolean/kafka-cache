@@ -150,4 +150,6 @@ describe('kafka-cache build-contract basics', function () {
   // We might want to test this by simply creating two caches on the same
   // topic
   it('supports scaling the service to several replicas');
+
+  after(() => KafkaCache.destroyAllClients());
 });
