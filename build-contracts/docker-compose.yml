@@ -46,6 +46,8 @@ services:
     build: ./basics
     labels:
       - com.yolean.build-contract
+    environment:
+      KAFKA_CACHE_GROUP_SUFFIX: basics-foo-bar-12345
     links:
       - kafka
       - zookeeper
@@ -59,6 +61,8 @@ services:
       - kafka
       - zookeeper
     working_dir: /usr/src/yolean-kafka-cache
+    environment:
+      KAFKA_CACHE_GROUP_SUFFIX: itest-foo-bar-12345
     entrypoint:
       - npm
       - run
