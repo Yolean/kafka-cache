@@ -14,6 +14,121 @@ function createMockMetricsApi() {
 
 describe('KafkaCache unit-tests', function () {
 
+  it('exposes an additional .waitForOffset functionality that becomes important when kafka is backing a cache', async function () {
+    const logger = {
+      debug: simple.spy(),
+      error: simple.spy((...args) => console.error(...args)),
+      info: simple.spy(),
+      warn: simple.spy()
+    };
+
+    const mocks = {
+      stream: simple.mock()
+    };
+
+    const metricsApi = createMockMetricsApi();
+
+    const cache = new KafkaCache({
+      streamReady: Promise.resolve({ stream: mocks.stream, currentTopicOffset: -1 }),
+      log: logger,
+      levelupOptions: {
+        keyEncoding: 'utf-8',
+        valueEncoding: 'json'
+      },
+      resolver: x => x,
+      metrics: metricsApi
+    });
+
+    await cache.onReady();
+
+    const produceFlakyMessage = (message) => {
+      setTimeout(() => {
+        mocks.stream.lastCall.arg(message);
+      }, Math.random() * 50);
+    }
+
+    // Support listeners registered before the offset is present
+    const offsetReady = cache.waitForOffset(0);
+    produceFlakyMessage({
+      key: 'key1',
+      value: Buffer.from(JSON.stringify({ foo: 'bar' })),
+      offset: 0
+    });
+    await offsetReady;
+    const value = await cache.get('key1');
+    expect(value).to.deep.equal({ foo: 'bar' });
+
+    // Support listeners registered after the offset was already received
+    produceFlakyMessage({
+      key: 'key2',
+      value: Buffer.from(JSON.stringify({ foo: 'bar' })),
+      offset: 2
+    });
+    produceFlakyMessage({
+      key: 'key2',
+      value: Buffer.from(JSON.stringify({ foo: 'bar' })),
+      offset: 3
+    });
+    await offsetReady;
+    await cache.waitForOffset(3);
+    await cache.waitForOffset(2);
+    const value2 = await cache.get('key2');
+    expect(value2).to.deep.equal({ foo: 'bar' });
+  });
+
+  it('helps us avoid adding stupid listeners on the initial catch-up consumption of all messages when starting a service', async function () {
+    const logger = {
+      debug: simple.spy(),
+      error: simple.spy((...args) => console.error(...args)),
+      info: simple.spy(),
+      warn: simple.spy()
+    };
+
+    const mocks = {
+      stream: simple.mock()
+    };
+
+    const metricsApi = createMockMetricsApi();
+
+    const currentTopicOffset = 3;
+    const cache = new KafkaCache({
+      streamReady: Promise.resolve({ stream: mocks.stream, currentTopicOffset }),
+      log: logger,
+      levelupOptions: {
+        keyEncoding: 'utf-8',
+        valueEncoding: 'json'
+      },
+      resolver: x => x,
+      metrics: metricsApi
+    });
+
+    try {
+      await cache.waitForOffset(3);
+      throw new Error('cache.waitForOffset never thew an error even though onReady was not resolved yet!');
+    } catch (err) {
+      expect(err.message).to.equal('cache.onReady() must have been triggered before cache.waitForOffset() is available!');
+    }
+
+    const produceMessage = offset => {
+      mocks.stream.lastCall.arg({
+        key: 'key1',
+        value: Buffer.from(JSON.stringify({ messageNumber: offset })),
+        offset
+      });
+    }
+
+    for (let i = 0; i <= currentTopicOffset; i++) {
+      produceMessage(i);
+    }
+
+    await cache.onReady();
+    // Should not throw :)
+    await cache.waitForOffset(0);
+    await cache.waitForOffset(1);
+    await cache.waitForOffset(2);
+    await cache.waitForOffset(3);
+  });
+
   it('ignores payloads with missing keys but logs them and reports them as metrics', async function () {
 
     const logger = {
