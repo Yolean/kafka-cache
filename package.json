@@ -37,12 +37,12 @@
     "simple-mock": "0.8.0"
   },
   "dependencies": {
-    "async": "2.6.0",
+    "async": "3.2.0",
     "bunyan": "1.8.12",
-    "encoding-down": "4.0.0",
-    "leveldown": "3.0.0",
-    "levelup": "2.0.2",
-    "memdown": "2.0.0",
-    "moment": "2.22.2"
+    "encoding-down": "6.3.0",
+    "leveldown": "5.5.1",
+    "levelup": "4.3.2",
+    "memdown": "5.1.0",
+    "moment": "2.24.0"
   }
 }
