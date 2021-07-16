@@ -1,8 +1,8 @@
 FROM yolean/node-kafka-cache
 
-WORKDIR /usr/src/app
+COPY --chown=nonroot:nogroup package.json /usr/src/app/package.json
 
-COPY package.json .
+WORKDIR /usr/src/app
 
 RUN npm install --development
 
