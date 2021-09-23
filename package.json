@@ -1,6 +1,6 @@
 {
   "name": "kafka-cache",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Explorations for the log-backed in-memory cache we need in almost every service",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,7 @@
     "prepublishOnly": "npm test"
   },
   "engines": {
-    "node": ">=8.7"
+    "node": ">=16.5"
   },
   "repository": {
     "type": "git",
@@ -29,20 +29,20 @@
   },
   "homepage": "https://github.com/Yolean/kafka-cache#readme",
   "devDependencies": {
-    "@types/node-rdkafka": "github:Yolean/node-rdkafka-types",
+    "@types/node-rdkafka": "Yolean/node-rdkafka-types",
     "aguid": "2.0.0",
     "build-contract": "1.5.0",
-    "chai": "4.1.2",
-    "mocha": "4.0.1",
+    "chai": "4.3.4",
+    "mocha": "9.0.2",
     "simple-mock": "0.8.0"
   },
   "dependencies": {
-    "async": "2.6.0",
-    "bunyan": "1.8.12",
-    "encoding-down": "4.0.0",
-    "leveldown": "3.0.0",
-    "levelup": "2.0.2",
-    "memdown": "2.0.0",
-    "moment": "2.22.2"
+    "async": "3.2.0",
+    "bunyan": "1.8.15",
+    "encoding-down": "7.0.0",
+    "leveldown": "6.0.0",
+    "levelup": "5.0.1",
+    "memdown": "6.0.0",
+    "moment": "2.29.1"
   }
 }
