@@ -43,6 +43,6 @@
     "leveldown": "6.0.0",
     "levelup": "5.0.1",
     "memdown": "6.0.0",
-    "moment": "2.29.1"
+    "moment": "2.29.2"
   }
 }
