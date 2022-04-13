@@ -37,7 +37,7 @@
     "simple-mock": "0.8.0"
   },
   "dependencies": {
-    "async": "3.2.0",
+    "async": "3.2.2",
     "bunyan": "1.8.15",
     "encoding-down": "7.0.0",
     "leveldown": "6.0.0",
