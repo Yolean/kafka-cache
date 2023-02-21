@@ -33,7 +33,7 @@
     "aguid": "2.0.0",
     "build-contract": "1.5.0",
     "chai": "4.3.4",
-    "mocha": "9.0.2",
+    "mocha": "9.2.2",
     "simple-mock": "0.8.0"
   },
   "dependencies": {
