@@ -1,6 +1,6 @@
 {
   "name": "kafka-cache",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Explorations for the log-backed in-memory cache we need in almost every service",
   "main": "index.js",
   "scripts": {
